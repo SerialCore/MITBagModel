@@ -22,12 +22,11 @@ BeginPackage["MITBagModel`"]
 Unprotect @@ Names["MITBagModel`*"];
 ClearAll @@ Names["MITBagModel`*"];
 
-MassVector::usage="MassVector[] return mass vactor"
-ChargeVector::usage="ChargeVector[] return charge vactor"
-Flavour::usage="Flavour[structure] returns only flavour configuration"
+MassVector::usage="MassVector[] returns mass vactor"
+ChargeVector::usage="ChargeVector[] returns charge vactor"
 
-Hadron::usage="Hadron[structure, colorspin, correction] returns mass, radius"
-HadronFitting::usage="HadronFitting[structure, colorspin, m, B, Z, correction] returns mass, radius"
+Hadron::usage="Hadron[structure, colorspin, correction] returns mass, radius, x"
+HadronFitting::usage="HadronFitting[structure, colorspin, m, B, Z, correction] returns mass, radius, x"
 
 CouplingConstant::usage="CouplingConstant[radius] returns coupling cosntant"
 ChargeRadius::usage="ChargeRadius[quark and antiquark structure, hadron] return charge radius"
@@ -36,40 +35,20 @@ MagneticMoment::usage="MagneticMoment[quark and antiquark structure, hadron] ret
 Begin["`Private`"]
 
 
-(* ::InheritFromParent:: *)
-(*"ChargeRadius[quark and antiquark structure, x, hadron] return charge radius"*)
-
-
-(* ::InheritFromParent:: *)
-(*"MagneticMoment[quark and antiquark structure, hadron] return magnetic moment"*)
-
-
-MassVector[]:=Return[{5.090,1.640,0.279,0,0}]
+MassVector[]:=Return[{5.093,1.641,0.279,0,0}]
 
 ChargeVector[]:=Return[{-1/3,2/3,-1/3,2/3,-1/3}]
 
-Flavour[structure_]:=
-	Module[{n=structure},
-		f={0,0,0,1};
-		For[i=1,i<=3,i++,
-			If[n[[i]]==0,f[[i]]=0,f[[i]]=1]
-		];
-		Return[f]
-	]
+Hadron[structure_,colorspin_,correct_]:=HadronFitting[structure,colorspin,MassVector[],0.145^4,1.83,correct]
 
-Hadron[structure_,colorspin_,correct_]:=HadronFitting[structure,colorspin,MassVector[],{0,0,0,0.145^4},{0,0,0,1.83},correct]
-
-HadronFitting[structure_,colorspin_,quarks_,bag_,zpe_,correction_]:=
-	Module[{n=structure,CMI=colorspin,m=quarks,B=bag,Z=zpe,cor=correction},
+HadronFitting[structure_,colorspin_,mass_,bagconstant_,zpe_,correction_]:=
+	Module[{n=structure,CMI=colorspin,m=mass,B=bagconstant,Z=zpe,cor=correction},
 		Clear[x,R];
 		
-		(* n: number of b, c, s, q quarks *)
-		(* m: mass of b, c, s, q quarks *)
-		(* B: bag constant of b, c, s, q quarks *)
-		(* Z: zpe of b, c, s, q quarks *)
-		
-		(* flavour configuration of quarks *)
-		f=Flavour[n];
+		(* n: number of b, c, s, q quarks or antiquarks *)
+		(* m: mass of b, c, s, q quarks or antiquarks *)
+		(* B: bag constant *)
+		(* Z: zpe *)
 		
 		(* momentum of b, c, s, q quarks *)
 		x={3.08,2.94,2.48,2.04};
@@ -81,7 +60,7 @@ HadronFitting[structure_,colorspin_,quarks_,bag_,zpe_,correction_]:=
 			\[Mu][mi_,xi_,R_]=R/6 (4\[Omega][mi,xi,R]*R+2mi*R-3)/(2\[Omega][mi,xi,R]*R(\[Omega][mi,xi,R]*R-1)+mi*R);
 			y[xi_]=xi-Sin[xi]Cos[xi];
 			A[xi_,xj_,R_]=1+(xi*Sin[xi]^2-3/2 y[xi])^-1 (xj*Sin[xj]^2-3/2 y[xj])^-1 (-(3/2)y[xi]*y[xj]-2xi*xj*Sin[xi]^2 Sin[xj]^2+1/2 xi*xj(2xi*SinIntegral[2xi]+2xj*SinIntegral[2xj]-(xi+xj)SinIntegral[2(xi+xj)]-(xi-xj)SinIntegral[2(xi-xj)]));
-			M[r_]=Sum[Abs[n[[q]]]*\[Omega][m[[q]],x[[q]],r]+(4\[Pi]*r^3)/3 f[[q]]*B[[q]]-(f[[q]]*Z[[q]])/r,{q,1,4}]-3*CouplingConstant[r]*Sum[CMI[[p,q]]*(\[Mu][m[[p]],x[[p]],r]*\[Mu][m[[q]],x[[q]],r])/r^3 A[x[[p]],x[[q]],r],{p,1,4},{q,1,4}]+cor;
+			M[r_]=Sum[n[[q]]*\[Omega][m[[q]],x[[q]],r],{q,1,4}]+(4\[Pi]*r^3)/3 B-Z/r-3*CouplingConstant[r]*Sum[CMI[[p,q]]*(\[Mu][m[[p]],x[[p]],r]*\[Mu][m[[q]],x[[q]],r])/r^3 A[x[[p]],x[[q]],r],{p,1,4},{q,1,4}]+cor;
 			
 			(* perform variation *)
 			minimal = Minimize[{M[R],0<R<6},R];
