@@ -1,3 +1,3 @@
 # MITBagModel
 
-Please copy the directory "MITBagModel" into the applications path of Mathematica.
+This repo contains fundamental programs for calculating hadron spectra by MTIBagModel.
