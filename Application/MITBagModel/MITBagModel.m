@@ -115,21 +115,6 @@ MagneticMoment[qstructure_,antistructure_,hadron_]:=
 		\[Mu][mi_,xi_,r_]=r/6 (4\[Omega][mi,xi,r]r+2mi*r-3)/(2\[Omega][mi,xi,r]r(\[Omega][mi,xi,r]r-1)+mi*r);
 		Sum[qn[[q]]*Q[[q]]*\[Mu][m[[q]],x[[q]],R]-an[[q]]*Q[[q]]*\[Mu][m[[q]],x[[q]],R],{q,1,5}]
 	]
-	
-MixingEigenVector[vector_,hadron_]:=
-	Module[{v=vector,hd=hadron},
-		m=MassVector[];
-		R=hd[[2]];
-		x={hd[[3,1]],hd[[3,2]],hd[[3,3]],hd[[3,4]],hd[[3,4]]};
-		
-		\[Omega][mi_,xi_,r_]:=(mi^2+xi^2/r^2)^(1/2);
-		\[Mu][mi_,xi_,r_]:=r/6 (4\[Omega][mi,xi,r]r+2mi*r-3)/(2\[Omega][mi,xi,r]r(\[Omega][mi,xi,r]r-1)+mi*r);
-		y[xi_]:=xi-Sin[xi]Cos[xi];
-		A[xi_,xj_]:=1+(xi*Sin[xi]^2-3/2 y[xi])^-1 (xj*Sin[xj]^2-3/2 y[xj])^-1 (-(3/2)y[xi]*y[xj]-2xi*xj*Sin[xi]^2 Sin[xj]^2+1/2 xi*xj(2xi*SinIntegral[2xi]+2xj*SinIntegral[2xj]-(xi+xj)SinIntegral[2(xi+xj)]-(xi-xj)SinIntegral[2(xi-xj)]));
-		Sij[qi_,qj_,r_]:=3*CouplingConstant[r]/r^3*\[Mu][m[[qi]],x[[qi]],r]*\[Mu][m[[qj]],x[[qj]],r]*A[x[[qi]],x[[qj]]];
-		
-		Normalize[{v[[1]]/.{Cij[qi_,qj_]:>Sij[qi,qj,R]},v[[2]]}]
-	]
 
 
 
