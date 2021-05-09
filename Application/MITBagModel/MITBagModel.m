@@ -50,7 +50,7 @@ Hadron[structure_,colorspin_,correction_]:=HadronFitting[structure,colorspin,Mas
 
 HadronFitting[structure_,colorspin_,mass_,bagconstant_,zpe_,correction_]:=
 	Module[{n=structure,CMI=colorspin,m=mass,B=bagconstant,Z=zpe,cor=correction},
-		Clear[x,R];
+		Clear[x,y,R,\[Omega],\[Mu],A,Sij,M];
 		
 		(* n: number of b, c, s, n quarks or antiquarks *)
 		(* m: mass of b, c, s, n quarks or antiquarks *)
