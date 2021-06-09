@@ -68,7 +68,7 @@ HadronFitting[structure_,colorspin_,mass_,bagconstant_,zpe_,correction_]:=
 		M[r_]:=Sum[n[[q]]*\[Omega][m[[q]],x[[q]],r],{q,1,4}]+(4\[Pi]*r^3)/3 B-Z/r-3*CouplingConstant[r]*Sum[CMI[[p,q]]*(\[Mu][m[[p]],x[[p]],r]*\[Mu][m[[q]],x[[q]],r])/r^3 A[x[[p]],x[[q]]],{p,1,4},{q,1,4}];
 		
 		(* use iteration to calculate the minimal mass with precise momentum x *)
-		For[loop=0,loop<3,loop++,
+		For[loop=0,loop<5,loop++,
 			(* perform variation *)
 			minimal = Minimize[{M[R],0<R<7},R];
 			x[[1]]=X /.FindRoot[Tan[X]==X/(1-m[[1]]*(R/.Last[minimal])-(m[[1]]^2 (R/.Last[minimal])^2+X^2)^(1/2)),{X,2.04,3.14}];
