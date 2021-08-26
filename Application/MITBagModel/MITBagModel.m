@@ -100,8 +100,8 @@ ChargeRadius[qstructure_,antistructure_,hadron_]:=
 		x={hd[[3,1]],hd[[3,2]],hd[[3,3]],hd[[3,4]],hd[[3,4]]};
 		
 		\[Omega][mi_,xi_,r_]=(mi^2+xi^2/r^2)^(1/2);
-		r2[mi_,xi_,r_]=r^2 ((\[Omega][mi,xi,r]r(2xi^2 (\[Omega][mi,xi,r]r-1)+4\[Omega][mi,xi,r]r+2mi*r-3)-3/2 mi*r(4\[Omega][mi,xi,r]r+2mi*r-2xi^2-3))/(3xi^2 (2\[Omega][mi,xi,r]r(\[Omega][mi,xi,r]r-1)+mi*r)));
-		Abs[Sum[qn[[q]]*Q[[q]]*r2[m[[q]],x[[q]],R]-an[[q]]*Q[[q]]*r2[m[[q]],x[[q]],R],{q,1,5}]]^(1/2)/5.067
+		rsquare[mi_,xi_,r_]=r^2 ((\[Omega][mi,xi,r]r(2xi^2 (\[Omega][mi,xi,r]r-1)+4\[Omega][mi,xi,r]r+2mi*r-3)-3/2 mi*r(4\[Omega][mi,xi,r]r+2mi*r-2xi^2-3))/(3xi^2 (2\[Omega][mi,xi,r]r(\[Omega][mi,xi,r]r-1)+mi*r)));
+		Abs[Sum[qn[[q]]*Q[[q]]*rsquare[m[[q]],x[[q]],R]-an[[q]]*Q[[q]]*rsquare[m[[q]],x[[q]],R],{q,1,5}]]^(1/2)/5.067
 	]
 	
 MagneticMoment[qstructure_,antistructure_,hadron_]:=
